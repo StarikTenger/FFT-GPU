@@ -27,5 +27,5 @@ if __name__ == "__main__":
     
     file1 = sys.argv[1]
     file2 = sys.argv[2]
-    result, message = compare_files(file1, file2)
+    result, message = compare_files(file1, file2, 1e-3)
     print(message)

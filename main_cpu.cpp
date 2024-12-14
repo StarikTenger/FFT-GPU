@@ -7,7 +7,7 @@
 #include <iomanip>
 #include "genbmp.h"
 
-typedef float fl;
+typedef double fl;
 
 using namespace std;
 
@@ -42,18 +42,14 @@ void fft_step(const fl *buff_in, fl *buff_out, size_t N, size_t stride, stringst
     for (size_t i = stride; i > 1; i >>= 1) {
         step++;
     }
-    cout << stride << " " << step << endl;
 
     for (size_t i = 0; i < N; i++) {
         size_t u = i / (N / stride);
-        // size_t idx_1 = (i + u * N / stride) % N;
-        // size_t idx_2 = (i + (u + 1) * N / stride) % N;
         size_t idx_1 = i;
         size_t idx_2 = (i ^ (stride / 2)) % N;
         if ((i % stride) >= stride / 2) {
             swap(idx_1, idx_2);
         }
-        //cout << i << "\t" << idx_1 << "\t" << idx_2 << endl;
         
         graph_stream 
              << "" << step -1   << "." << idx_1 << " -> "
@@ -96,7 +92,6 @@ void fft(const fl *buff_in, fl *buff_out, size_t N, stringstream &graph_stream) 
         }
         buff2[i] = buff1[j];
         buff2[N + i] = buff1[N + j];
-        cout << i << " -> " << j << endl;
     }
 
     swap(buff1, buff2);
@@ -141,28 +136,11 @@ void serialize_output(const fl *buff, size_t N, const string &filename, int prec
 }
 
 int main() {
-    //std::cout << "PI = " << std::numbers::pi_v<double> * 1000 << "\n";
-    // int height = 361;
-    // int width = 867;
-    // unsigned char image[height][width][BYTES_PER_PIXEL];
-    // char* imageFileName = (char*) "bitmapImage.bmp";
-
-    // int i, j;
-    // for (i = 0; i < height; i++) {
-    //     for (j = 0; j < width; j++) {
-    //         image[i][j][2] = (unsigned char) ( i * 255 / height );             ///red
-    //         image[i][j][1] = (unsigned char) ( j * 255 / width );              ///green
-    //         image[i][j][0] = (unsigned char) ( (i+j) * 255 / (height+width) ); ///blue
-    //     }
-    // }
-
-    // generateBitmapImage((unsigned char*) image, height, width, imageFileName);
-    // printf("Image generated!!");
 
     stringstream graph_stream;
     graph_stream << "digraph G {\n";
 
-    size_t N = 8;
+    size_t N = 4096;
     fl *buff_in = new fl[N * 2];
     fl *buff_out = new fl[N * 2];
 
@@ -183,13 +161,13 @@ int main() {
     }
 
     // Print buff_in
-    print_buff(buff_in, N);
+    // print_buff(buff_in, N);
 
     // FFT
     fft(buff_in, buff_out, N, graph_stream);
 
     // Print buff_out
-    print_buff(buff_out, N);
+    // print_buff(buff_out, N);
 
     graph_stream << "}";
 
@@ -199,5 +177,5 @@ int main() {
     graph_file.close();
 
     // Serialize output
-    serialize_output(buff_out, N, "output_cpp_seq.txt");
+    serialize_output(buff_out, N, "output_cpp_seq.txt", 6);
 }
