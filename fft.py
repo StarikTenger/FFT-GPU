@@ -1,6 +1,6 @@
 import numpy as np
 
-N = 4096
+N = 64
 array = np.zeros(N)
 array[N//2:] = 1
 

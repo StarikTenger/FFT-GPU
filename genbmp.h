@@ -1,3 +1,6 @@
+#pragma once
+
+
 #include <stdio.h>
 
 const int BYTES_PER_PIXEL = 3; /// red, green, & blue

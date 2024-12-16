@@ -11,11 +11,12 @@ include_directories(${PROJECT_SOURCE_DIR})
 
 add_executable(gemm_cpu main_cpu.cpp)
 
-
 # CUDA Libraries
-# find_package(CUDA)
-# if(CUDA_FOUND)
-#   enable_language(CUDA)
-#   include_directories(${CUDA_INCLUDE_DIRS} )
-#   add_executable(gemm_cuda main_gpu.cu)
-# endif()
+find_package(CUDA)
+if(CUDA_FOUND)
+    enable_language(CUDA)
+    include_directories(${CUDA_INCLUDE_DIRS})
+    add_executable(gemm_cuda main_gpu.cu)
+    set_target_properties(gemm_cuda PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+    target_compile_options(gemm_cuda PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-expt-relaxed-constexpr>)
+endif()

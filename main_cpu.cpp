@@ -1,3 +1,6 @@
+#include "genbmp.h"
+#include "util.h"
+
 #include <iostream>
 #include <complex>
 #include <numbers>
@@ -5,9 +8,8 @@
 #include <cstring>
 #include <sstream>
 #include <iomanip>
-#include "genbmp.h"
 
-typedef double fl;
+#include "fl.h"
 
 using namespace std;
 
@@ -16,20 +18,6 @@ void complex_mul(const fl v1[2], const fl v2[2], fl v3[2]) {
     v3[0] = v1[0] * v2[0] - v1[1] * v2[1];
     v3[1] = v1[0] * v2[1] + v1[1] * v2[0];
 }
-
-void print_buff(const fl *buff, size_t N) {
-    std::cout << std::fixed << std::showpoint;
-    std::cout << std::setprecision(2);
-    for (size_t i = 0; i < N; i++) {
-        cout << buff[i] << "\t";
-    }
-    cout << endl;
-    for (size_t i = 0; i < N; i++) {
-        cout << buff[i + N] << "\t";
-    }
-    cout << endl;
-}
-
 
 
 /*  
@@ -44,7 +32,6 @@ void fft_step(const fl *buff_in, fl *buff_out, size_t N, size_t stride, stringst
     }
 
     for (size_t i = 0; i < N; i++) {
-        size_t u = i / (N / stride);
         size_t idx_1 = i;
         size_t idx_2 = (i ^ (stride / 2)) % N;
         if ((i % stride) >= stride / 2) {
@@ -114,33 +101,12 @@ void fft(const fl *buff_in, fl *buff_out, size_t N, stringstream &graph_stream) 
     delete buff_to_delete;
 }
 
-void serialize_output(const fl *buff, size_t N, const string &filename, int precision = 2) {
-    ofstream file(filename);
-    if (!file.is_open()) {
-        cerr << "Error opening file: " << filename << endl;
-        return;
-    }
-
-    file << std::fixed << std::showpoint;
-    file << std::setprecision(precision);
-
-    file << N << endl;
-
-    for (size_t i = 0; i < N; i++) {
-        file << buff[i] << "\t";
-        file << buff[i + N] << "\n";
-    }
-    file << endl;
-
-    file.close();
-}
-
 int main() {
 
     stringstream graph_stream;
     graph_stream << "digraph G {\n";
 
-    size_t N = 4096;
+    size_t N = 32;
     fl *buff_in = new fl[N * 2];
     fl *buff_out = new fl[N * 2];
 
