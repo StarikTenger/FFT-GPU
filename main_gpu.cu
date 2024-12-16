@@ -90,8 +90,9 @@ void fft_gpu(const fl *buff_in, fl *buff_out, size_t N) {
     }
 
     // Define workspace topology
-	dim3 dimBlock(N, 1);
-	dim3 dimGrid(1,1);
+    size_t block_size = 32;
+	dim3 dimBlock(block_size, 1);
+	dim3 dimGrid(N / block_size, 1);
 
     bool need_swap = 0;
     for (size_t stride = 2; stride <= N; stride <<= 1) {
@@ -114,7 +115,7 @@ void fft_gpu(const fl *buff_in, fl *buff_out, size_t N) {
 
 int main() {
 
-    size_t N = 32;
+    size_t N = 1024;
     fl *buff_in = new fl[N * 2];
     fl *buff_out = new fl[N * 2];
 

@@ -106,7 +106,7 @@ int main() {
     stringstream graph_stream;
     graph_stream << "digraph G {\n";
 
-    size_t N = 32;
+    size_t N = 1024;
     fl *buff_in = new fl[N * 2];
     fl *buff_out = new fl[N * 2];
 
