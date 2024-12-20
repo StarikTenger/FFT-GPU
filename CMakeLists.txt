@@ -9,14 +9,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 include_directories(${PROJECT_SOURCE_DIR})
 
-add_executable(gemm_cpu main_cpu.cpp)
+add_executable(gemm_cpu main_cpu.cpp fft_cpu.cpp genbmp.cpp util.cpp)
 
 # CUDA Libraries
 find_package(CUDA)
 if(CUDA_FOUND)
     enable_language(CUDA)
     include_directories(${CUDA_INCLUDE_DIRS})
-    add_executable(gemm_cuda main_gpu.cu)
+    add_executable(gemm_cuda main_gpu.cu fft_gpu.cu genbmp.cpp util.cpp)
     set_target_properties(gemm_cuda PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
     target_compile_options(gemm_cuda PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:-expt-relaxed-constexpr>)
 endif()
