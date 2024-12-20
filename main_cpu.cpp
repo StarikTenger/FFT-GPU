@@ -1,6 +1,8 @@
+#include "fl.h"
 #include "genbmp.h"
 #include "util.h"
 
+#include <cstdlib>
 #include <iostream>
 #include <complex>
 #include <numbers>
@@ -8,8 +10,7 @@
 #include <cstring>
 #include <sstream>
 #include <iomanip>
-
-#include "fl.h"
+#include <chrono>
 
 using namespace std;
 
@@ -38,14 +39,14 @@ void fft_step(const fl *buff_in, fl *buff_out, size_t N, size_t stride, stringst
             swap(idx_1, idx_2);
         }
         
-        graph_stream 
-             << "" << step -1   << "." << idx_1 << " -> "
-             << "" << step << "." << i
-             << "\n";
-        graph_stream 
-             << "" << step - 1 << "." << idx_2 << " -> "
-             << "" << step << "." << i
-             << "[color=red,label=\"W" << stride << " " << i << "\"]\n";
+        // graph_stream 
+        //      << "" << step -1   << "." << idx_1 << " -> "
+        //      << "" << step << "." << i
+        //      << "\n";
+        // graph_stream 
+        //      << "" << step - 1 << "." << idx_2 << " -> "
+        //      << "" << step << "." << i
+        //      << "[color=red,label=\"W" << stride << " " << i << "\"]\n";
 
         complex<fl> w = std::pow(
             numbers::e_v<fl>,
@@ -62,7 +63,6 @@ void fft_step(const fl *buff_in, fl *buff_out, size_t N, size_t stride, stringst
 }
 
 void fft(const fl *buff_in, fl *buff_out, size_t N, stringstream &graph_stream) {
-    //graph_stream << "b";
 
     fl *buff1 = new fl[N * 2];
     fl *buff_to_delete = buff1;
@@ -101,12 +101,18 @@ void fft(const fl *buff_in, fl *buff_out, size_t N, stringstream &graph_stream) 
     delete buff_to_delete;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <N>" << std::endl;
+        return 1;
+    }
 
-    stringstream graph_stream;
-    graph_stream << "digraph G {\n";
+    size_t N = std::atoi(argv[1]);
+    if (N & (N - 1)) {
+        std::cerr << "N must be a power of 2" << std::endl;
+        return 1;
+    }
 
-    size_t N = 1024;
     fl *buff_in = new fl[N * 2];
     fl *buff_out = new fl[N * 2];
 
@@ -120,6 +126,11 @@ int main() {
         steps++;
     }
 
+    // Initialize graph
+
+    stringstream graph_stream;
+    graph_stream << "digraph G {\n";
+
     for (size_t step = 0; step <= steps; step++) {
         for (size_t i = 0; i < N; i++) {
             graph_stream << step << "." << i << " [pos=\"" << step * 3 << "," << (N - i) << "!\"];\n";
@@ -130,7 +141,13 @@ int main() {
     // print_buff(buff_in, N);
 
     // FFT
+    auto start = chrono::high_resolution_clock::now();
+
     fft(buff_in, buff_out, N, graph_stream);
+
+    auto end = chrono::high_resolution_clock::now();
+    chrono::duration<double> elapsed = end - start;
+    cout << "Time taken for cpu: " << elapsed.count() * 1000 << " ms" << endl;
 
     // Print buff_out
     // print_buff(buff_out, N);
