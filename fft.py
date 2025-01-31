@@ -1,6 +1,11 @@
 import numpy as np
+import sys
 
 N = 64
+if len(sys.argv) > 1:
+    N = int(sys.argv[1])
+else:
+    N = 64
 array = np.zeros(N)
 array[N//2:] = 1
 

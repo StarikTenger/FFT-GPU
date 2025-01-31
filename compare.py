@@ -21,11 +21,12 @@ def compare_files(file1, file2, epsilon=1e-6):
     return True, "Result are identical with precision of " + str(epsilon)
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python compare.py <file1> <file2>")
+    if len(sys.argv) != 4:
+        print("Usage: python compare.py <file1> <file2> <precision>")
         sys.exit(1)
     
     file1 = sys.argv[1]
     file2 = sys.argv[2]
-    result, message = compare_files(file1, file2, 1e-3)
+    eps = float(sys.argv[3])
+    result, message = compare_files(file1, file2, eps)
     print(message)

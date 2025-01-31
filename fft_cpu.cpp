@@ -11,6 +11,7 @@
 #include <sstream>
 #include <iomanip>
 #include <chrono>
+#include <thrust/complex.h>
 
 using namespace std;
 
@@ -41,14 +42,14 @@ void fft_step(const fl *buff_in, fl *buff_out, size_t N, size_t stride, stringst
         //      << "" << step << "." << i
         //      << "[color=red,label=\"W" << stride << " " << i << "\"]\n";
 
-        complex<fl> w = std::pow(
-            numbers::e_v<fl>,
-            complex<fl>(0, -2. * numbers::pi_v<fl> * i / stride)
+        thrust::complex<fl> w = thrust::pow(
+            M_E,
+            thrust::complex<fl>(0, -2. * M_PI * i / stride)
         );
 
-        complex<fl> res =
-            complex<fl>(buff_in[idx_1], buff_in[idx_1 + N]) +
-            complex<fl>(buff_in[idx_2], buff_in[idx_2 + N]) * w;
+        thrust::complex<fl> res =
+            thrust::complex<fl>(buff_in[idx_1], buff_in[idx_1 + N]) +
+            thrust::complex<fl>(buff_in[idx_2], buff_in[idx_2 + N]) * w;
 
         buff_out[i] = res.real();
         buff_out[i + N] = res.imag();
@@ -75,7 +76,6 @@ void fft_cpu(const fl *buff_in, fl *buff_out, size_t N, stringstream &graph_stre
     }
 
     swap(buff1, buff2);
-    need_swap = !need_swap;
 
 
     for (size_t stride = 2; stride <= N; stride <<= 1) {
@@ -85,11 +85,9 @@ void fft_cpu(const fl *buff_in, fl *buff_out, size_t N, stringstream &graph_stre
         //cout << endl;
 
         swap(buff1, buff2);
-        need_swap = !need_swap;
     }
 
-    if (need_swap) {
-        memcpy(buff_out, buff1, (N * 2) * sizeof(fl));
-    }
+    memcpy(buff_out, buff1, (N * 2) * sizeof(fl));
+
     delete buff_to_delete;
 }

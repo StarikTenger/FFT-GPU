@@ -69,9 +69,7 @@ int main(int argc, char *argv[]) {
     // Print buff_out
     // print_buff(buff_out, N);
 
-    // Serialize output
-    serialize_output(buff_out, N, "output_cpp_gpu.txt", 6);
-
+    
     delete[] buff_in;
     delete[] buff_out;
 

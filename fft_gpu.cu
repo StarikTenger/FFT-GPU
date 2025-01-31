@@ -97,21 +97,15 @@ void fft_gpu(const fl *buff_in, fl *buff_out, size_t N) {
 	dim3 dimBlock(block_size, 1);
 	dim3 dimGrid(N / block_size, 1);
 
-    bool need_swap = 0;
     for (size_t stride = 2; stride <= N; stride <<= 1) {
 
         fft_step<<<dimGrid, dimBlock>>>(buff_gpu1, buff_gpu2, N, stride);
         cudaDeviceSynchronize();
 
         swap(buff_gpu1, buff_gpu2);
-        need_swap = !need_swap;
     }
 
-    if (need_swap) {
-        cudaMemcpy(buff_out, buff_gpu1, buff_size, cudaMemcpyDeviceToHost);
-    } else {
-        cudaMemcpy(buff_out, buff_gpu2, buff_size, cudaMemcpyDeviceToHost);
-    }
+    cudaMemcpy(buff_out, buff_gpu1, buff_size, cudaMemcpyDeviceToHost);
 
     delete[] buff_to_delete;
 }
