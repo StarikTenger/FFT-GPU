@@ -38,3 +38,7 @@ python3 ../compare.py fft_output_python.txt output_cpp_gpu.txt $precision
 echo
 echo "c++ CPU vs cuda GPU"
 python3 ../compare.py output_cpp_seq.txt output_cpp_gpu.txt $precision
+
+echo
+echo "c++ CPU vs cuda GPU shared"
+python3 ../compare.py output_cpp_seq.txt output_cpp_gpu_shared.txt $precision

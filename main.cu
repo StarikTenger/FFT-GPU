@@ -3,10 +3,13 @@
 #include "util.h"
 #include "fft_cpu.h"
 #include "fft_gpu.h"
+#include "fft_gpu_shared.h"
 
 #include <cstdlib>
 #include <iostream>
 #include <chrono>
+#include <set>
+#include <vector>
 
 using namespace std;
 
@@ -65,6 +68,7 @@ int main(int argc, char *argv[]) {
 
     // GPU
     {
+        cout << " --- " << endl;
         cudaEvent_t start, stop;
         cudaEventCreate(&start);
         cudaEventCreate(&stop);
@@ -97,6 +101,40 @@ int main(int argc, char *argv[]) {
 
     }
 
+    // GPU shared
+    {
+        cout << " --- " << endl;
+        cudaEvent_t start, stop;
+        cudaEventCreate(&start);
+        cudaEventCreate(&stop);
+
+        auto chrono_start = chrono::high_resolution_clock::now();
+
+
+        cudaEventRecord(start);
+
+        fft_gpu_shared(buff_in, buff_out, N);
+
+        auto chrono_end = chrono::high_resolution_clock::now();
+        chrono::duration<double> elapsed = chrono_end - chrono_start;
+        cout << "FFT execution time (chrono): " << elapsed.count() * 1000 << " ms" << endl;
+
+        cudaEventRecord(stop);
+
+        cudaEventSynchronize(stop);
+
+        float milliseconds = 0;
+        cudaEventElapsedTime(&milliseconds, start, stop);
+
+        std::cout << "Time taken for gpu (shared mem): " << milliseconds << " ms" << std::endl;
+
+        cudaEventDestroy(start);
+        cudaEventDestroy(stop);
+
+        // Serialize output
+        serialize_output(buff_out, N, "output_cpp_gpu_shared.txt", 6);
+    }
+
     // =========================================================================
 
     graph_stream << "}";
@@ -105,4 +143,39 @@ int main(int argc, char *argv[]) {
     ofstream graph_file("graph.dot");
     graph_file << graph_stream.str();
     graph_file.close();
+
+    // {
+    //     // Shared topology test
+    //     int log_bsize = 1;
+    //     int bsize = 1<<log_bsize;
+    //     int N = 16;
+
+    //     for (int epoch = 0; epoch < 4; epoch++) {
+    //         cout << "Epoch " << epoch << "\n";
+
+    //         vector<set<pair<int, int>>> mapping(N);
+
+    //         for (int b = 0; b < N / bsize; b++) {
+    //             int pos = (b>>(epoch * log_bsize)) * 1<<(log_bsize * (epoch + 1));
+    //             int offset = b % (1<<(log_bsize * epoch));
+    //             cout << "b = " << b << "; pos = " << pos << "; offset = " << offset << endl;
+    //             for (int i = 0; i < bsize; i++) {
+    //                 mapping[pos + offset + i * (1<<(log_bsize * epoch))].insert({b, i});
+    //             }
+    //         }
+
+    //         for (int i = 0; i < N; i++) {
+    //             cout << i << "\t: ";
+    //             for (auto it = mapping[i].begin(); it != mapping[i].end(); ++it) {
+    //                 if (it != mapping[i].begin()) {
+    //                     cout << ", ";
+    //                 }
+    //                 cout << it->first << " : " << it->second;
+    //             }
+    //             cout << endl;
+    //         }
+    //         cout << endl;
+    //     }      
+
+    // }
 }

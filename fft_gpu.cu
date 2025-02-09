@@ -1,3 +1,4 @@
+#include "fft_gpu.h"
 #include "util.h"
 #include "fl.h"
 
