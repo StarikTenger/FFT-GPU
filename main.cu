@@ -54,6 +54,7 @@ int main(int argc, char *argv[]) {
 
     // CPU
     {
+        cout << "\nRunning fft cpu" << endl;
         auto start = chrono::high_resolution_clock::now();
 
         fft_cpu(buff_in, buff_out, N, graph_stream);
@@ -68,7 +69,8 @@ int main(int argc, char *argv[]) {
 
     // GPU
     {
-        cout << " --- " << endl;
+        cout << "\nRunning fft gpu" << endl;
+
         cudaEvent_t start, stop;
         cudaEventCreate(&start);
         cudaEventCreate(&stop);
@@ -103,7 +105,9 @@ int main(int argc, char *argv[]) {
 
     // GPU shared
     {
-        cout << " --- " << endl;
+        cout << "\nRunning fft gpu shared" << endl;
+
+
         cudaEvent_t start, stop;
         cudaEventCreate(&start);
         cudaEventCreate(&stop);

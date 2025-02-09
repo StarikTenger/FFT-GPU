@@ -13,11 +13,11 @@ echo
 echo " ================ RUNNING ================"
 echo
 
-echo "Running CPU"
 ./../build/fft $vec_size
 # dot -Kfdp -n -Tpng -o graph_ordered.png graph.dot 
 # dot -Tpng -o graph.png graph.dot 
 
+echo
 echo "Running python"
 python3 ../fft.py $vec_size
 

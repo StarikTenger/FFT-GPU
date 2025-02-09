@@ -48,7 +48,6 @@ __global__ void fft_step(const fl *buff_in, fl *buff_out, size_t N, size_t strid
 }
 
 void fft_gpu(const fl *buff_in, fl *buff_out, size_t N) {
-    cout << "starting fft gpu" << endl;
     fl *buff1 = new fl[N * 2];
     fl *buff_to_delete = buff1;
     memcpy((void*)buff1, (void*)buff_in, (N * 2) * sizeof(fl));

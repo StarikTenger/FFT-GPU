@@ -61,7 +61,6 @@ __global__ void fft_step_shared(const fl *buff_in, fl *buff_out, size_t N, size_
 }
 
 void fft_gpu_shared(const fl *buff_in, fl *buff_out, size_t N) {
-    cout << "starting fft gpu shared" << endl;
     fl *buff1 = new fl[N * 2];
     fl *buff_to_delete = buff1;
     memcpy((void*)buff1, (void*)buff_in, (N * 2) * sizeof(fl));
@@ -116,7 +115,7 @@ void fft_gpu_shared(const fl *buff_in, fl *buff_out, size_t N) {
 
     for (size_t epoch = 0; epoch < bitlen / log_bsize; epoch++) {
         
-        cout << "Epoch " << epoch << "; step=" << (1<<(log_bsize * epoch)) << "\n";
+        // cout << "Epoch " << epoch << "; step=" << (1<<(log_bsize * epoch)) << "\n";
 
         fft_step_shared<<<dimGrid, dimBlock>>>(buff_gpu1, buff_gpu2, N, epoch, log_bsize);
         cudaDeviceSynchronize();
