@@ -13,7 +13,9 @@ echo
 echo " ================ RUNNING ================"
 echo
 
-./../build/fft $vec_size
+./../build/main $vec_size
+./../build/main_gpu $vec_size
+./../build/main_shared $vec_size
 # dot -Kfdp -n -Tpng -o graph_ordered.png graph.dot 
 # dot -Tpng -o graph.png graph.dot 
 

@@ -11,8 +11,8 @@
 #include <chrono>
 
 __global__ void fft_step_shared(const fl *buff_in, fl *buff_out, size_t N, size_t epoch, size_t log_bsize) {
-    __shared__ fl shared_buff_1[64];
-    __shared__ fl shared_buff_2[64];
+    __shared__ fl shared_buff_1[2048];
+    __shared__ fl shared_buff_2[2048];
 
     // Load from global memory
     int pos = (blockIdx.x>>(epoch * log_bsize)) * 1<<(log_bsize * (epoch + 1));
@@ -106,7 +106,7 @@ void fft_gpu_shared(const fl *buff_in, fl *buff_out, size_t N) {
     }
 
     // Define workspace topology
-    size_t log_bsize = 5;
+    size_t log_bsize = 10;
     size_t block_size = 1<<log_bsize;
 	dim3 dimBlock(block_size, 1);
 	dim3 dimGrid(N / block_size, 1);

@@ -52,10 +52,10 @@ int main(int argc, char *argv[]) {
 
     // ================================== FFT ==================================
 
-
-    // GPU
+    // GPU shared
     {
-        cout << "\nRunning fft gpu" << endl;
+        cout << "\nRunning fft gpu shared" << endl;
+
 
         cudaEvent_t start, stop;
         cudaEventCreate(&start);
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
 
         cudaEventRecord(start);
 
-        fft_gpu(buff_in, buff_out, N);
+        fft_gpu_shared(buff_in, buff_out, N);
 
         auto chrono_end = chrono::high_resolution_clock::now();
         chrono::duration<double> elapsed = chrono_end - chrono_start;
@@ -79,16 +79,14 @@ int main(int argc, char *argv[]) {
         float milliseconds = 0;
         cudaEventElapsedTime(&milliseconds, start, stop);
 
-        std::cout << "Time taken for gpu: " << milliseconds << " ms" << std::endl;
+        std::cout << "Time taken for gpu (shared mem): " << milliseconds << " ms" << std::endl;
 
         cudaEventDestroy(start);
         cudaEventDestroy(stop);
 
         // Serialize output
-        serialize_output(buff_out, N, "output_cpp_gpu.txt", 6);
-
+        serialize_output(buff_out, N, "output_cpp_gpu_shared.txt", 6);
     }
 
-   
     // =========================================================================
 }
