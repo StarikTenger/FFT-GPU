@@ -29,3 +29,10 @@ def serialize_fft_to_file(filename, fft_result, precision):
 
 # Serialize FFT result to file
 serialize_fft_to_file('fft_output_python.txt', fft_result, 6)
+
+
+# Apply inverse FFT
+ifft_result = np.fft.ifft(fft_result)
+
+# Serialize inverse FFT result to file
+serialize_fft_to_file('fft_output_python_reversed.txt', ifft_result, 6)

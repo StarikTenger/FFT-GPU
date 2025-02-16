@@ -1,9 +1,7 @@
 #include "fl.h"
 #include "genbmp.h"
 #include "util.h"
-#include "fft_cpu.h"
 #include "fft_gpu.h"
-#include "fft_gpu_shared.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -86,6 +84,10 @@ int main(int argc, char *argv[]) {
 
         // Serialize output
         serialize_output(buff_out, N, "output_cpp_gpu.txt", 6);
+
+        swap(buff_in, buff_out);
+        reverse_fft_gpu(buff_in, buff_out, N);
+        serialize_output(buff_out, N, "output_cpp_gpu_reversed.txt", 6);
 
     }
 

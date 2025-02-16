@@ -44,3 +44,8 @@ python3 ../compare.py output_cpp_seq.txt output_cpp_gpu.txt $precision
 echo
 echo "c++ CPU vs cuda GPU shared"
 python3 ../compare.py output_cpp_seq.txt output_cpp_gpu_shared.txt $precision
+
+
+echo
+echo "cuda GPU vs Python (reversed)"
+python3 ../compare.py fft_output_python_reversed.txt output_cpp_gpu_reversed.txt $precision
