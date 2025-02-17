@@ -14,10 +14,10 @@ find_package(CUDA REQUIRED)
 include_directories(${CUDA_INCLUDE_DIRS})
 
 # Source files
-set(FFT_SOURCES fft_gpu.cu fft_gpu_shared.cu fft_cpu.cpp genbmp.cpp util.cpp bitrev_reorder.cpp)
+set(FFT_SOURCES fft_gpu.cu fft_gpu_shared.cu fft_cpu.cpp genbmp.cpp util.cpp bitrev_reorder.cpp image_freq.cu)
 
 # Main files
-set(MAIN_FILES main.cu main_gpu.cu main_shared.cu)
+set(MAIN_FILES main.cu main_gpu.cu main_shared.cu main_img.cpp)
 
 # Add executables
 foreach(MAIN_FILE ${MAIN_FILES})

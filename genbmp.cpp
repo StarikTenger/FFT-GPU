@@ -1,5 +1,7 @@
 #include "genbmp.h"
 
+#include <iostream>
+
 void generateBitmapImage (unsigned char* image, int height, int width, char* imageFileName)
 {
     int widthInBytes = width * BYTES_PER_PIXEL;
@@ -77,4 +79,58 @@ unsigned char* createBitmapInfoHeader (int height, int width)
     infoHeader[14] = (unsigned char)(BYTES_PER_PIXEL*8);
 
     return infoHeader;
+}
+
+using namespace std;
+
+#define DATA_OFFSET_OFFSET 0x000A
+#define WIDTH_OFFSET 0x0012
+#define HEIGHT_OFFSET 0x0016
+#define BITS_PER_PIXEL_OFFSET 0x001C
+#define HEADER_SIZE 14
+#define INFO_HEADER_SIZE 40
+#define NO_COMPRESION 0
+#define MAX_NUMBER_OF_COLORS 0
+#define ALL_COLORS_REQUIRED 0
+
+unsigned char* readBMP(const char* filename, int &width, int &height) 
+{
+    int i;
+    FILE* f = fopen(filename, "rb");
+
+    if(f == NULL)
+        throw "Argument Exception";
+
+    unsigned char info[54];
+    fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
+
+    // extract image height and width from header
+    width = *(int*)&info[18];
+    height = *(int*)&info[22];
+
+    cout << endl;
+    cout << "  Name: " << filename << endl;
+    cout << " Width: " << width << endl;
+    cout << "Height: " << height << endl;
+
+    int row_padded = width * height * 3;
+    unsigned char* data = new unsigned char[row_padded];
+    unsigned char tmp;
+
+    for(int i = 0; i < height; i++)
+    {
+        fread(data, sizeof(unsigned char), row_padded, f);
+        for(int j = 0; j < width*3; j += 3)
+        {
+            // Convert (B, G, R) to (R, G, B)
+            tmp = data[j];
+            data[j] = data[j+2];
+            data[j+2] = tmp;
+
+            //cout << "R: "<< (int)data[j] << " G: " << (int)data[j+1]<< " B: " << (int)data[j+2]<< endl;
+        }
+    }
+
+    fclose(f);
+    return data;
 }

@@ -10,3 +10,5 @@ const int INFO_HEADER_SIZE = 40;
 void generateBitmapImage(unsigned char* image, int height, int width, char* imageFileName);
 unsigned char* createBitmapFileHeader(int height, int stride);
 unsigned char* createBitmapInfoHeader(int height, int width);
+
+unsigned char* readBMP(const char* filename, int &width, int &height);

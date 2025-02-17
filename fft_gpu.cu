@@ -5,7 +5,6 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <complex>
 #include <math.h>
 #include <numbers>
 #include <thrust/complex.h>
