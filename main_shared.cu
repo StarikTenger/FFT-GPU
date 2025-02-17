@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 
     // GPU shared
     {
-        cout << "\nRunning fft gpu shared" << endl;
+        cerr << "\nRunning fft gpu shared" << endl;
 
 
         cudaEvent_t start, stop;
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 
         auto chrono_end = chrono::high_resolution_clock::now();
         chrono::duration<double> elapsed = chrono_end - chrono_start;
-        cout << "FFT execution time (chrono): " << elapsed.count() * 1000 << " ms" << endl;
+        cerr << "FFT execution time (chrono): " << elapsed.count() * 1000 << " ms" << endl;
 
         cudaEventRecord(stop);
 
@@ -79,7 +79,8 @@ int main(int argc, char *argv[]) {
         float milliseconds = 0;
         cudaEventElapsedTime(&milliseconds, start, stop);
 
-        std::cout << "Time taken for gpu (shared mem): " << milliseconds << " ms" << std::endl;
+        std::cerr << "Time taken for gpu (shared mem): " << milliseconds << " ms" << std::endl;
+        std::cout << "GPU-shared,\t\t" << N << ",\t" << milliseconds << std::endl;
 
         cudaEventDestroy(start);
         cudaEventDestroy(stop);

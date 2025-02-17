@@ -108,10 +108,10 @@ unsigned char* readBMP(const char* filename, int &width, int &height)
     width = *(int*)&info[18];
     height = *(int*)&info[22];
 
-    cout << endl;
-    cout << "  Name: " << filename << endl;
-    cout << " Width: " << width << endl;
-    cout << "Height: " << height << endl;
+    cerr << endl;
+    cerr << "  Name: " << filename << endl;
+    cerr << " Width: " << width << endl;
+    cerr << "Height: " << height << endl;
 
     int row_padded = width * height * 3;
     unsigned char* data = new unsigned char[row_padded];
@@ -127,7 +127,7 @@ unsigned char* readBMP(const char* filename, int &width, int &height)
             data[j] = data[j+2];
             data[j+2] = tmp;
 
-            //cout << "R: "<< (int)data[j] << " G: " << (int)data[j+1]<< " B: " << (int)data[j+2]<< endl;
+            //cerr << "R: "<< (int)data[j] << " G: " << (int)data[j+1]<< " B: " << (int)data[j+2]<< endl;
         }
     }
 

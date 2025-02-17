@@ -113,6 +113,8 @@ void fft_gpu(const fl *buff_in, fl *buff_out, size_t N) {
     delete[] buff_to_delete;
 }
 
+
+
 void reverse_fft_gpu(const fl *buff_in, fl *buff_out, size_t N) {
     fl *buff1 = new fl[N * 2];
     fl *buff_to_delete = buff1;
@@ -150,7 +152,7 @@ void reverse_fft_gpu(const fl *buff_in, fl *buff_out, size_t N) {
     }
 
     // Define workspace topology
-    size_t block_size = 32;
+    size_t block_size = BLOCK_SIZE;
 	dim3 dimBlock(block_size, 1);
 	dim3 dimGrid(N / block_size, 1);
 

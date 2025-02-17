@@ -74,7 +74,7 @@ void img_to_freq(const fl *img_buff, fl *freq_buff, size_t width, size_t height)
 
     // Copy image to buffer
 
-    cout << "copy:" << endl;
+    cerr << "copy:" << endl;
 
     fl *buff1 = new fl[width * height * 2];
 
@@ -85,7 +85,7 @@ void img_to_freq(const fl *img_buff, fl *freq_buff, size_t width, size_t height)
         }
     }
 
-    cout << "fft rows:" << endl;
+    cerr << "fft rows:" << endl;
 
     // FFT on rows
     fl *buff2 = new fl[width * height * 2];
@@ -96,7 +96,7 @@ void img_to_freq(const fl *img_buff, fl *freq_buff, size_t width, size_t height)
     }
     swap(buff1, buff2);
 
-    cout << "reorede" << endl;
+    cerr << "reorede" << endl;
 
     // Reorder
 
@@ -109,7 +109,7 @@ void img_to_freq(const fl *img_buff, fl *freq_buff, size_t width, size_t height)
     swap(buff1, buff2);
 
 
-    cout << "fft columns:" << endl;
+    cerr << "fft columns:" << endl;
 
     // FFT on columns
 
@@ -118,7 +118,7 @@ void img_to_freq(const fl *img_buff, fl *freq_buff, size_t width, size_t height)
         fft_gpu(buff1 + offset, buff2 + offset, height);
     }
 
-    cout << "copy back" << endl;
+    cerr << "copy back" << endl;
 
     // Copy back
 
@@ -132,15 +132,15 @@ void freq_to_img(const fl *freq_buff, fl *img_buff, size_t width, size_t height)
     // Reverse fft on columns
     fl *buff1 = new fl[width * height * 2];
 
-    cout << "1" << endl;
+    cerr << "1" << endl;
 
     for (int i = 0; i < width; i++) {
         size_t offset = i * height * 2;
         reverse_fft_gpu(freq_buff + offset, buff1 + offset, height);
-        //cout << "i: " << i << endl;
+        //cerr << "i: " << i << endl;
     }
 
-    cout << "2" << endl;
+    cerr << "2" << endl;
 
     // Reorder
     fl *buff2 = new fl[width * height * 2];
@@ -152,7 +152,7 @@ void freq_to_img(const fl *freq_buff, fl *img_buff, size_t width, size_t height)
     }
     swap(buff1, buff2);
 
-    cout << "3" << endl;
+    cerr << "3" << endl;
 
     // Reverse fft on rows
     for (int i = 0; i < height; i++) {
@@ -160,7 +160,7 @@ void freq_to_img(const fl *freq_buff, fl *img_buff, size_t width, size_t height)
         reverse_fft_gpu(buff1 + offset, buff2 + offset, width);
     }
 
-    cout << "4" << endl;
+    cerr << "4" << endl;
 
     // Copy back
     for (int i = 0; i < height; i++) {

@@ -106,7 +106,7 @@ void fft_gpu_shared(const fl *buff_in, fl *buff_out, size_t N) {
     }
 
     // Define workspace topology
-    size_t log_bsize = 10;
+    size_t log_bsize = 5;
     size_t block_size = 1<<log_bsize;
 	dim3 dimBlock(block_size, 1);
 	dim3 dimGrid(N / block_size, 1);
@@ -115,7 +115,7 @@ void fft_gpu_shared(const fl *buff_in, fl *buff_out, size_t N) {
 
     for (size_t epoch = 0; epoch < bitlen / log_bsize; epoch++) {
         
-        // cout << "Epoch " << epoch << "; step=" << (1<<(log_bsize * epoch)) << "\n";
+        // cerr << "Epoch " << epoch << "; step=" << (1<<(log_bsize * epoch)) << "\n";
 
         fft_step_shared<<<dimGrid, dimBlock>>>(buff_gpu1, buff_gpu2, N, epoch, log_bsize);
         cudaDeviceSynchronize();

@@ -79,10 +79,10 @@ void fft_cpu(const fl *buff_in, fl *buff_out, size_t N, stringstream &graph_stre
 
 
     for (size_t stride = 2; stride <= N; stride <<= 1) {
-        //cout << "stride = " << stride << endl;
+        //cerr << "stride = " << stride << endl;
         fft_step(buff1, buff2, N, stride, graph_stream);
 
-        //cout << endl;
+        //cerr << endl;
 
         swap(buff1, buff2);
     }

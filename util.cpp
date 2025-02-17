@@ -3,16 +3,16 @@
 using namespace std;
 
 void print_buff(const fl *buff, size_t N) {
-    std::cout << std::fixed << std::showpoint;
-    std::cout << std::setprecision(2);
+    std::cerr << std::fixed << std::showpoint;
+    std::cerr << std::setprecision(2);
     for (size_t i = 0; i < N; i++) {
-        cout << buff[i] << "\t";
+        cerr << buff[i] << "\t";
     }
-    cout << endl;
+    cerr << endl;
     for (size_t i = 0; i < N; i++) {
-        cout << buff[i + N] << "\t";
+        cerr << buff[i + N] << "\t";
     }
-    cout << endl;
+    cerr << endl;
 }
 
 void serialize_output(const fl *buff, size_t N, const string &filename, int precision) {

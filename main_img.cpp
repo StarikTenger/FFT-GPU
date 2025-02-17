@@ -12,8 +12,8 @@ int main() {
     int width, height;
     unsigned char *image = readBMP(filename, width, height);
 
-    cout << "bmp read" << endl;
-    cout << "width: " << width << " height: " << height << endl;
+    cerr << "bmp read" << endl;
+    cerr << "width: " << width << " height: " << height << endl;
 
     // Extract the red channel
     fl *red_buff = new fl[width * height];
@@ -25,7 +25,7 @@ int main() {
         blue_buff[i] = image[i * BYTES_PER_PIXEL + 2];
     }
 
-    cout << "red channel extracted" << endl;
+    cerr << "red channel extracted" << endl;
 
     // Perform FFT
     fl *red_freq_buff = new fl[width * height * 2];
@@ -38,7 +38,7 @@ int main() {
     img_to_freq(blue_buff, blue_freq_buff, width, height);
 
 
-    cout << "fft completed" << endl;
+    cerr << "fft completed" << endl;
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
@@ -66,7 +66,7 @@ int main() {
     fl *img_buff_out_blue = new fl[width * height];
     freq_to_img(blue_freq_buff, img_buff_out_blue, width, height);
 
-    cout << "ifft completed" << endl;
+    cerr << "ifft completed" << endl;
 
     // Save the image
     unsigned char *image_out = new unsigned char[width * height * BYTES_PER_PIXEL];
@@ -76,9 +76,9 @@ int main() {
         image_out[i * BYTES_PER_PIXEL + 2] = img_buff_out_blue[i];
     }
 
-    cout << "img converted" << endl;
+    cerr << "img converted" << endl;
 
     generateBitmapImage(image_out, height, width, "output.bmp");
 
-    cout << "img saved" << endl;
+    cerr << "img saved" << endl;
 }
