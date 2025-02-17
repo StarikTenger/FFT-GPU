@@ -78,8 +78,8 @@ int main(int argc, char *argv[]) {
         cudaEventElapsedTime(&milliseconds, start, stop);
 
         std::cerr << "Time taken for gpu: " << milliseconds << " ms" << std::endl;
-        //std::cout << "GPU,\t\t" << N << ",\t" << milliseconds << std::endl;
-        std::cout << BLOCK_SIZE << ",\t\t" << N << ",\t" << milliseconds << std::endl;
+        std::cout << "GPU,\t\t" << N << ",\t" << milliseconds << std::endl;
+        //std::cout << BLOCK_SIZE << ",\t\t" << N << ",\t" << milliseconds << std::endl;
 
         cudaEventDestroy(start);
         cudaEventDestroy(stop);
